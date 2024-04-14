@@ -1,1 +1,101 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Linked List Node
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// Stack
+typedef struct {
+    int* array;
+    int top;
+    unsigned capacity;
+} Stack;
+
+// Queue
+typedef struct {
+    int* array;
+    int front, rear, size;
+    unsigned capacity;
+} Queue;
+
+// Binary Tree Node
+typedef struct TreeNode {
+    int data;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+// Graph Node
+typedef struct GraphNode {
+    int data;
+    struct GraphNode* next;
+} GraphNode;
+
+// Graph
+typedef struct {
+    int numVertices;
+    GraphNode** adjLists;
+} Graph;
+
+// Hash Table
+#define TABLE_SIZE 10
+typedef struct {
+    int key;
+    int value;
+} HashEntry;
+
+typedef struct {
+    HashEntry* table[TABLE_SIZE];
+} HashTable;
+
+int main() {
+    // Array
+    int array[5] = {1, 2, 3, 4, 5};
+
+    // Linked List
+    Node* head = NULL;
+
+    // Stack
+    Stack* stack = (Stack*)malloc(sizeof(Stack));
+    stack->capacity = 5;
+    stack->top = -1;
+    stack->array = (int*)malloc(stack->capacity * sizeof(int));
+
+    // Queue
+    Queue* queue = (Queue*)malloc(sizeof(Queue));
+    queue->capacity = 5;
+    queue->front = 0;
+    queue->rear = -1;
+    queue->size = 0;
+    queue->array = (int*)malloc(queue->capacity * sizeof(int));
+
+    // Binary Tree
+    TreeNode* root = NULL;
+
+    // Graph
+    Graph* graph = (Graph*)malloc(sizeof(Graph));
+    graph->numVertices = 5;
+    graph->adjLists = (GraphNode**)malloc(graph->numVertices * sizeof(GraphNode*));
+    for (int i = 0; i < graph->numVertices; ++i)
+        graph->adjLists[i] = NULL;
+
+    // Hash Table
+    HashTable* hashTable = (HashTable*)malloc(sizeof(HashTable));
+    for (int i = 0; i < TABLE_SIZE; ++i)
+        hashTable->table[i] = NULL;
+
+    // Memory cleanup
+    free(stack->array);
+    free(stack);
+    free(queue->array);
+    free(queue);
+    free(graph->adjLists);
+    free(graph);
+    free(hashTable);
+
+    return 0;
+}
 
