@@ -1,1 +1,218 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Linear Search
+int linearSearch(int arr[], int n, int target) {
+    for (int i = 0; i < n; ++i) {
+        if (arr[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Binary Search
+int binarySearch(int arr[], int low, int high, int target) {
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        }
+        if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return -1;
+}
+
+// Bubble Sort
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Selection Sort
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; ++i) {
+        int minIndex = i;
+        for (int j = i + 1; j < n; ++j) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        if (minIndex != i) {
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        }
+    }
+}
+
+// Insertion Sort
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; ++i) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// Merge Sort
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    int L[n1], R[n2];
+
+    for (int i = 0; i < n1; ++i)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; ++j)
+        R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            ++i;
+        } else {
+            arr[k] = R[j];
+            ++j;
+        }
+        ++k;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        ++i;
+        ++k;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        ++j;
+        ++k;
+    }
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+// Quick Sort
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j <= high - 1; ++j) {
+        if (arr[j] < pivot) {
+            ++i;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// Fibonacci Series using Dynamic Programming
+int fibonacci(int n) {
+    int fib[n + 1];
+    fib[0] = 0;
+    fib[1] = 1;
+    for (int i = 2; i <= n; ++i) {
+        fib[i] = fib[i - 1] + fib[i - 2];
+    }
+    return fib[n];
+}
+
+int main() {
+    int arr[] = {5, 2, 9, 1, 6, 3, 8, 4, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int target = 6;
+
+    // Linear Search
+    printf("Linear Search: %d\n", linearSearch(arr, n, target));
+
+    // Binary Search (Requires sorted array)
+    printf("Binary Search: %d\n", binarySearch(arr, 0, n - 1, target));
+
+    // Sorting Algorithms
+    printf("Original Array:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    bubbleSort(arr, n);
+    printf("Bubble Sort:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    selectionSort(arr, n);
+    printf("Selection Sort:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    int arr2[] = {5, 2, 9, 1, 6, 3, 8, 4, 7}; // Resetting original array for other sorting algorithms
+    insertionSort(arr2, n);
+    printf("Insertion Sort:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr2[i]);
+    }
+    printf("\n");
+
+    int arr3[] = {5, 2, 9, 1, 6, 3, 8, 4, 7}; // Resetting original array for other sorting algorithms
+    mergeSort(arr3, 0, n - 1);
+    printf("Merge Sort:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr3[i]);
+    }
+    printf("\n");
+
+    int arr4[] = {5, 2, 9, 1, 6, 3, 8, 4, 7}; // Resetting original array for other sorting algorithms
+    quickSort(arr4, 0, n - 1);
+    printf("Quick Sort:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr4[i]);
+    }
+    printf("\n");
+
+    // Fibonacci Series
+    int fibNumber = 10;
+    printf("Fibonacci(%d) = %d\n", fibNumber, fibonacci(fibNumber));
+
+    return 0;
+}
 
