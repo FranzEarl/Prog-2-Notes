@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+} Node;
+
+Node *createNode(int data) {
+    Node *newNode = malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void printForward(Node *head) {
+    Node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void printBackward(Node *tail) {
+    Node *temp = tail;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->prev;
+    }
+    printf("\n");
+}
+
+Node *reverseList(Node *head) {
+    Node *temp = NULL;
+    Node *current = head;
+
+
+    while (current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+
+ 
+    if (temp != NULL) {
+        head = temp->prev;
+    }
+
+    return head;
+}
+
+int main() {
+    Node *head = createNode(1);
+    head->next = createNode(2);
+    head->next->prev = head;
+    head->next->next = createNode(3);
+    head->next->next->prev = head->next;
+    head->next->next->next = createNode(4);
+    head->next->next->next->prev = head->next->next;
+    head->next->next->next->next = createNode(5);
+    head->next->next->next->next->prev = head->next->next->next;
+
+    printf("Original linked list (forward): ");
+    printForward(head);
+
+    printf("Original linked list (backward): ");
+    printBackward(head->next->next->next->next);
+
+    head = reverseList(head);
+
+    printf("Reversed linked list (forward): ");
+    printForward(head);
+
+    printf("Reversed linked list (backward): ");
+    printBackward(head->next->next->next->next);
+
+    Node *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}
