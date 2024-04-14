@@ -1,1 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // Opening a file in different modes
+    FILE *file_read = fopen("example.txt", "r"); // Read mode
+    FILE *file_write = fopen("output.txt", "w"); // Write mode
+    FILE *file_append = fopen("append.txt", "a"); // Append mode
+
+    // Error checking
+    if (file_read == NULL || file_write == NULL || file_append == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    // Writing to a file
+    fprintf(file_write, "This is a line written in write mode.\n");
+    fprintf(file_append, "This is a line written in append mode.\n");
+
+    // Reading from a file
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), file_read) != NULL) {
+        printf("Read from file: %s", buffer);
+    }
+
+    // Closing files
+    fclose(file_read);
+    fclose(file_write);
+    fclose(file_append);
+
+    return 0;
+}
 
