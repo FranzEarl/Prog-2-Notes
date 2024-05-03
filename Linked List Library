@@ -3,6 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+Implementation missing functions:
+push()
+append()
+*/
+
 //************************************************************************************************************************
 // Structs
 typedef struct node {
