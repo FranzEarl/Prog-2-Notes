@@ -1,0 +1,321 @@
+#ifndef LISTLIB_H
+#define LISTLIB_H
+#include <stdio.h>
+#include <stdlib.h>
+
+//************************************************************************************************************************
+// Structs
+typedef struct node {
+    int data;
+    struct node *next;
+} nodetype, *nodeptr;
+
+//*************************************************************************************************************************
+// Function Prototypes
+void deletelist(nodeptr *head);
+nodeptr copylist(nodeptr head);
+
+nodeptr createNode(int data);
+void deleteNode(nodeptr *head, int data);
+
+void display(nodeptr head);
+nodeptr search(nodeptr head, int key);
+
+int getsize(nodeptr head);
+
+void insertFront(nodeptr *head, int data);
+void insertRear(nodeptr *head, int data);
+void insertSorted(nodeptr *head, int data);
+
+nodeptr reverselist(nodeptr head);
+void sortlist(nodeptr *head);
+
+nodeptr mergesortedlist(nodeptr a, nodeptr b);
+nodeptr mergesort(nodeptr head);
+void removeduplicate(nodeptr head);
+nodeptr getnnode(nodeptr head, int n);
+
+int ispalindrome(nodeptr head);
+
+void rotate(nodeptr *head, int k);
+void swapnode(nodeptr *head, int x, int y);
+
+//********************************************************************************************************************
+// Function Definitions
+
+void deletelist(nodeptr *head) {
+    nodeptr current = *head;
+    nodeptr next;
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    *head = NULL;
+}
+
+nodeptr copylist(nodeptr head) {
+    if (head == NULL)
+        return NULL;
+    nodeptr new_head = createNode(head->data);
+    nodeptr current = head->next;
+    nodeptr new_current = new_head;
+    while (current != NULL) {
+        new_current->next = createNode(current->data);
+        new_current = new_current->next;
+        current = current->next;
+    }
+    return new_head;
+}
+
+nodeptr createNode(int data) {
+    nodeptr newNode = (nodeptr)malloc(sizeof(nodetype));
+    if (newNode != NULL) {
+        newNode->data = data;
+        newNode->next = NULL;
+    }
+    return newNode;
+}
+
+void deleteNode(nodeptr *head, int data) {
+    nodeptr current = *head;
+    nodeptr prev = NULL;
+
+    while (current != NULL && current->data != data) {
+        prev = current;
+        current = current->next;
+    }
+
+    if (current == NULL) return;
+
+    if (prev == NULL) {
+        *head = current->next;
+    } else {
+        prev->next = current->next;
+    }
+
+    free(current);
+}
+
+void display(nodeptr head) {
+    nodeptr current = head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+nodeptr search(nodeptr head, int key) {
+    nodeptr current = head;
+    while (current != NULL && current->data != key) {
+        current = current->next;
+    }
+    return current;
+}
+
+int getsize(nodeptr head) {
+    int size = 0;
+    nodeptr current = head;
+    while (current != NULL) {
+        size++;
+        current = current->next;
+    }
+    return size;
+}
+
+void insertFront(nodeptr *head, int data) {
+    nodeptr newNode = createNode(data);
+    if (newNode != NULL) {
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+
+void insertRear(nodeptr *head, int data) {
+    nodeptr newNode = createNode(data);
+    if (newNode != NULL) {
+        if (*head == NULL) {
+            *head = newNode;
+        } else {
+            nodeptr current = *head;
+            while (current->next != NULL) {
+                current = current->next;
+            }
+            current->next = newNode;
+        }
+    }
+}
+
+void insertSorted(nodeptr *head, int data) {
+    nodeptr newNode = createNode(data);
+    if (newNode != NULL) {
+        if (*head == NULL || (*head)->data >= data) {
+            newNode->next = *head;
+            *head = newNode;
+        } else {
+            nodeptr current = *head;
+            while (current->next != NULL && current->next->data < data) {
+                current = current->next;
+            }
+            newNode->next = current->next;
+            current->next = newNode;
+        }
+    }
+}
+
+nodeptr reverselist(nodeptr head) {
+    nodeptr prev = NULL;
+    nodeptr current = head;
+    nodeptr next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    return prev;
+}
+
+void sortlist(nodeptr *head) {
+    *head = mergesort(*head);
+}
+
+nodeptr mergesortedlist(nodeptr a, nodeptr b) {
+    if (a == NULL) return b;
+    if (b == NULL) return a;
+    
+    nodeptr result = NULL;
+    
+    if (a->data <= b->data) {
+        result = a;
+        result->next = mergesortedlist(a->next, b);
+    } else {
+        result = b;
+        result->next = mergesortedlist(a, b->next);
+    }
+    
+    return result;
+}
+
+nodeptr mergesort(nodeptr head);
+
+nodeptr mergesort(nodeptr head) {
+    if (head == NULL || head->next == NULL)
+        return head;
+
+    nodeptr slow = head;
+    nodeptr fast = head->next;
+
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    nodeptr secondHalf = slow->next;
+    slow->next = NULL;
+
+    nodeptr firstHalf = mergesort(head);
+    secondHalf = mergesort(secondHalf);
+
+    return mergesortedlist(firstHalf, secondHalf);
+}
+
+void removeduplicate(nodeptr head) {
+    nodeptr current = head;
+    while (current != NULL && current->next != NULL) {
+        if (current->data == current->next->data) {
+            nodeptr temp = current->next;
+            current->next = current->next->next;
+            free(temp);
+        } else {
+            current = current->next;
+        }
+    }
+}
+
+nodeptr getnnode(nodeptr head, int n) {
+    nodeptr current = head;
+    for (int i = 1; i < n && current != NULL; i++) {
+        current = current->next;
+    }
+    return current;
+}
+
+int ispalindrome(nodeptr head) {
+    nodeptr slow = head, fast = head;
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    nodeptr secondHalf = reverselist(slow);
+    while (head != NULL && secondHalf != NULL) {
+        if (head->data != secondHalf->data) {
+            return 0;
+        }
+        head = head->next;
+        secondHalf = secondHalf->next;
+    }
+    return 1;
+}
+
+void rotate(nodeptr *head, int k) {
+    if (k == 0)
+        return;
+    
+    nodeptr current = *head;
+    
+    int count = 1;
+    while (count < k && current != NULL) {
+        current = current->next;
+        count++;
+    }
+    
+    if (current == NULL)
+        return;
+    
+    nodeptr kthNode = current;
+    
+    while (current->next != NULL)
+        current = current->next;
+    
+    current->next = *head;
+    *head = kthNode->next;
+    kthNode->next = NULL;
+}
+
+void swapnode(nodeptr *head, int x, int y) {
+    if (x == y)
+        return;
+    
+    nodeptr prevX = NULL, currX = *head;
+    while (currX && currX->data != x) {
+        prevX = currX;
+        currX = currX->next;
+    }
+
+    nodeptr prevY = NULL, currY = *head;
+    while (currY && currY->data != y) {
+        prevY = currY;
+        currY = currY->next;
+    }
+    
+    if (currX == NULL || currY == NULL)
+        return;
+
+    if (prevX != NULL)
+        prevX->next = currY;
+    else
+        *head = currY;
+
+    if (prevY != NULL)
+        prevY->next = currX;
+    else
+        *head = currX;
+
+    nodeptr temp = currY->next;
+    currY->next = currX->next;
+    currX->next = temp;
+}
+
+#endif
