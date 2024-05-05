@@ -91,15 +91,7 @@ void deleteNode(nodeptr *head, int data) {
         prev = current;
         current = current->next;
     }
-
-    if (current == NULL) return;
-
-    if (prev == NULL) {
-        *head = current->next;
-    } else {
-        prev->next = current->next;
-    }
-
+    prev->next = current->next;
     free(current);
 }
 
