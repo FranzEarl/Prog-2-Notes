@@ -196,8 +196,6 @@ nodeptr mergesortedlist(nodeptr a, nodeptr b) {
     return result;
 }
 
-nodeptr mergesort(nodeptr head);
-
 nodeptr mergesort(nodeptr head) {
     if (head == NULL || head->next == NULL)
         return head;
