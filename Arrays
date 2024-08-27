@@ -1,1 +1,17 @@
+Arrays - are used to store multiple values in a single variable, instead of declaring separate variables for each value.
+
+Declaration - int array[size];
+Initialization - int array[size] = {1,2,3}; / int array[] = {1,2,3};
+Assignment - array[index] = 1;
+Size = sizeof(array) / sizeof(array[0]);
+
+2D Array - int array[row][col];
+3D Array - int array[row][col][depth];
+Dynamic Array
+String Array
+Pointer Array
+Jagged Array
+
+
+
 
