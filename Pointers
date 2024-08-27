@@ -1,1 +1,10 @@
+Pointer - is a variable that stores the memory address of another variable as its value.
+        - a pointer variable points to a data type (like int) of the same type, and is created with the * operator.
+        - the address of the variable you are working with is assigned to the pointer.
+
+Reference Operator(&)
+Dereference Operator(*)
+Format Specifier(%p)
+Pointer Arithmetic(*p+1)
+Double Pointers(**)
 
